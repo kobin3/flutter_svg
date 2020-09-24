@@ -478,6 +478,12 @@ class _Elements {
       parseDouble(parserState.attribute('x', def: '0')),
       parseDouble(parserState.attribute('y', def: '0')),
     );
+
+    final Offset shift = Offset(
+      parseDouble(parserState.attribute('shift-x', def: '0')),
+      parseDouble(parserState.attribute('shift-y', def: '0')),
+    );
+    
     final Size size = Size(
       parseDouble(parserState.attribute('width', def: '0')),
       parseDouble(parserState.attribute('height', def: '0')),
@@ -495,6 +501,7 @@ class _Elements {
         parentStyle,
       ),
       size: size,
+      shift: shift,
       transform: parseTransform(parserState.attribute('transform'))?.storage,
     );
     final bool isIri = parserState.checkForIri(drawable);

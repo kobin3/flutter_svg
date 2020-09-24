@@ -1106,6 +1106,7 @@ class DrawableRasterImage implements DrawableStyleable {
     this.style, {
     this.size,
     this.transform,
+    this.shift,
   })  : assert(image != null),
         assert(offset != null);
 
@@ -1114,6 +1115,8 @@ class DrawableRasterImage implements DrawableStyleable {
 
   /// The position for the top-left corner of the image.
   final Offset offset;
+
+  final Offset shift;
 
   /// The size to scale the image to.
   final Size size;
@@ -1142,12 +1145,26 @@ class DrawableRasterImage implements DrawableStyleable {
     if (scale != 1.0 || offset != Offset.zero || transform != null) {
       final Size halfDesiredSize = desiredSize / 2.0;
       final Size scaledHalfImageSize = imageSize * scale / 2.0;
-      final Offset shift = Offset(
+
+      Offset _shift = Offset(
         halfDesiredSize.width - scaledHalfImageSize.width,
         halfDesiredSize.height - scaledHalfImageSize.height,
       );
+
+      if(shift.dx < 0) {
+        _shift = Offset(0, _shift.dy);
+      }else if(shift.dx > 0){
+        _shift = Offset(_shift.dx * 2, _shift.dy);
+      }
+
+      if(shift.dy < 0){
+        _shift = Offset(_shift.dx, _shift.dy * 2);
+      }else if(shift.dy > 0){
+        _shift = Offset(_shift.dx, 0);
+      }
+
       canvas.save();
-      canvas.translate(offset.dx + shift.dx, offset.dy + shift.dy);
+      canvas.translate(offset.dx + _shift.dx, offset.dy + _shift.dy);
       canvas.scale(scale, scale);
       if (transform != null) {
         canvas.transform(transform);
