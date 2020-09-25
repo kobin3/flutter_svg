@@ -1137,10 +1137,14 @@ class DrawableRasterImage implements DrawableStyleable {
     double scale = 1.0;
     if (size != null) {
       desiredSize = size;
-      scale = math.min(
-        size.width / image.width,
-        size.height / image.height,
-      );
+      if(size.width > 0)
+        scale = math.min(
+          size.width / image.width,
+          size.height / image.height,
+        );
+      else{
+        scale = size.height / image.height;
+      }
     }
     if (scale != 1.0 || offset != Offset.zero || transform != null) {
       final Size halfDesiredSize = desiredSize / 2.0;
