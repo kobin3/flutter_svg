@@ -483,7 +483,7 @@ class _Elements {
       parseDouble(parserState.attribute('shift-x', def: '0')),
       parseDouble(parserState.attribute('shift-y', def: '0')),
     );
-    
+
     final Size size = Size(
       parseDouble(parserState.attribute('width', def: '0')),
       parseDouble(parserState.attribute('height', def: '0')),
@@ -524,17 +524,66 @@ class _Elements {
     final Queue<_TextInfo> textInfos = ListQueue<_TextInfo>();
     double lastTextWidth = 0;
 
+    final Size sizeBox = Size(
+      parseDouble(parserState.attribute('box-width', def: '0')),
+      parseDouble(parserState.attribute('box-height', def: '0')),
+    );
+
     void _processText(String value) {
       if (value.isEmpty) {
         return;
       }
       assert(textInfos.isNotEmpty);
       final _TextInfo lastTextInfo = textInfos.last;
-      final Paragraph fill = createParagraph(
+      Paragraph fill = createParagraph(
         value,
         lastTextInfo.style,
         lastTextInfo.style.fill,
       );
+
+      if (sizeBox.width != 0) {
+        double fs = lastTextInfo.style.textStyle.fontSize;
+
+        while (sizeBox.width < fill.longestLine) {
+          fs = fs - 0.2;
+
+          final DrawableStyle style = DrawableStyle(
+            stroke: lastTextInfo.style.stroke,
+            blendMode: lastTextInfo.style.blendMode,
+            clipPath: lastTextInfo.style.clipPath,
+            dashArray: lastTextInfo.style.dashArray,
+            dashOffset: lastTextInfo.style.dashOffset,
+            fill: lastTextInfo.style.fill,
+            groupOpacity: lastTextInfo.style.groupOpacity,
+            mask: lastTextInfo.style.mask,
+            pathFillType: lastTextInfo.style.pathFillType,
+            textStyle: DrawableTextStyle(
+              anchor: lastTextInfo.style.textStyle.anchor,
+              background: lastTextInfo.style.textStyle.background,
+              decoration: lastTextInfo.style.textStyle.decoration,
+              decorationColor: lastTextInfo.style.textStyle.decorationColor,
+              decorationStyle: lastTextInfo.style.textStyle.decorationStyle,
+              fontFamily: lastTextInfo.style.textStyle.fontFamily,
+              fontStyle: lastTextInfo.style.textStyle.fontStyle,
+              fontWeight: lastTextInfo.style.textStyle.fontWeight,
+              foreground: lastTextInfo.style.textStyle.foreground,
+              height: lastTextInfo.style.textStyle.height,
+              letterSpacing: lastTextInfo.style.textStyle.letterSpacing,
+              locale: lastTextInfo.style.textStyle.locale,
+              textBaseline: lastTextInfo.style.textStyle.textBaseline,
+              wordSpacing: lastTextInfo.style.textStyle.wordSpacing,
+              fontSize: fs,
+            )
+          );
+
+          fill = createParagraph(
+            value,
+            style,
+            style.fill,
+          );
+        }
+      }
+
       final Paragraph stroke = createParagraph(
         value,
         lastTextInfo.style,
