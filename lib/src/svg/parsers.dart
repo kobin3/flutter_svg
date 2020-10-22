@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert' hide Codec;
+import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
@@ -211,6 +212,8 @@ Future<Image> resolveImage(String href) async {
 
   if (href.startsWith('http')) {
     final Uint8List bytes = await httpGet(href);
+
+    print('http bytes : ${bytes.length}');
     return decodeImage(bytes);
   }
 
@@ -218,6 +221,19 @@ Future<Image> resolveImage(String href) async {
     final int commaLocation = href.indexOf(',') + 1;
     final Uint8List bytes = base64.decode(
         href.substring(commaLocation).replaceAll(_whitespacePattern, ''));
+
+    print('base64 bytes : ${bytes.length}');
+
+    return decodeImage(bytes);
+  }
+
+  if(href.startsWith('file:')){
+    final File file = File(href.replaceAll('file:', ''));
+
+    final Uint8List bytes = file.readAsBytesSync();
+
+    print('file bytes : ${bytes.length}');
+
     return decodeImage(bytes);
   }
 
