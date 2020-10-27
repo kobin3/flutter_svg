@@ -213,7 +213,7 @@ Future<Image> resolveImage(String href) async {
   if (href.startsWith('http')) {
     final Uint8List bytes = await httpGet(href);
 
-    print('http bytes : ${bytes.length}');
+    // print('http bytes : ${bytes.length}');
     return decodeImage(bytes);
   }
 
@@ -222,7 +222,7 @@ Future<Image> resolveImage(String href) async {
     final Uint8List bytes = base64.decode(
         href.substring(commaLocation).replaceAll(_whitespacePattern, ''));
 
-    print('base64 bytes : ${bytes.length}');
+    // print('base64 bytes : ${bytes.length}');
 
     return decodeImage(bytes);
   }
@@ -232,7 +232,7 @@ Future<Image> resolveImage(String href) async {
 
     final Uint8List bytes = file.readAsBytesSync();
 
-    print('file bytes : ${bytes.length}');
+    // print('file bytes : ${bytes.length}');
 
     return decodeImage(bytes);
   }
