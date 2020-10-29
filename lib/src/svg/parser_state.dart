@@ -529,18 +529,51 @@ class _Elements {
       parseDouble(parserState.attribute('box-height', def: '0')),
     );
 
+    final double letterSpacing = parseDouble(parserState.attribute('letterSpacing', def: '0'));
+
     void _processText(String value) {
       if (value.isEmpty) {
         return;
       }
       assert(textInfos.isNotEmpty);
+      
       final _TextInfo lastTextInfo = textInfos.last;
+
+      ///init without box-width size
       Paragraph fill = createParagraph(
         value,
-        lastTextInfo.style,
+        DrawableStyle(
+            stroke: lastTextInfo.style.stroke,
+            blendMode: lastTextInfo.style.blendMode,
+            clipPath: lastTextInfo.style.clipPath,
+            dashArray: lastTextInfo.style.dashArray,
+            dashOffset: lastTextInfo.style.dashOffset,
+            fill: lastTextInfo.style.fill,
+            groupOpacity: lastTextInfo.style.groupOpacity,
+            mask: lastTextInfo.style.mask,
+            pathFillType: lastTextInfo.style.pathFillType,
+            textStyle: DrawableTextStyle(
+              anchor: lastTextInfo.style.textStyle.anchor,
+              background: lastTextInfo.style.textStyle.background,
+              decoration: lastTextInfo.style.textStyle.decoration,
+              decorationColor: lastTextInfo.style.textStyle.decorationColor,
+              decorationStyle: lastTextInfo.style.textStyle.decorationStyle,
+              fontFamily: lastTextInfo.style.textStyle.fontFamily,
+              fontStyle: lastTextInfo.style.textStyle.fontStyle,
+              fontWeight: lastTextInfo.style.textStyle.fontWeight,
+              foreground: lastTextInfo.style.textStyle.foreground,
+              height: lastTextInfo.style.textStyle.height,
+              letterSpacing: letterSpacing > 0 ? letterSpacing : lastTextInfo.style.textStyle.letterSpacing,
+              locale: lastTextInfo.style.textStyle.locale,
+              textBaseline: lastTextInfo.style.textStyle.textBaseline,
+              wordSpacing: lastTextInfo.style.textStyle.wordSpacing,
+              fontSize: lastTextInfo.style.textStyle.fontSize,
+            )
+          ),
         lastTextInfo.style.fill,
       );
 
+      ///decrease with box-width
       if (sizeBox.width != 0) {
         double fs = lastTextInfo.style.textStyle.fontSize;
 
@@ -568,7 +601,7 @@ class _Elements {
               fontWeight: lastTextInfo.style.textStyle.fontWeight,
               foreground: lastTextInfo.style.textStyle.foreground,
               height: lastTextInfo.style.textStyle.height,
-              letterSpacing: lastTextInfo.style.textStyle.letterSpacing,
+              letterSpacing: letterSpacing > 0 ? letterSpacing : lastTextInfo.style.textStyle.letterSpacing,
               locale: lastTextInfo.style.textStyle.locale,
               textBaseline: lastTextInfo.style.textStyle.textBaseline,
               wordSpacing: lastTextInfo.style.textStyle.wordSpacing,
