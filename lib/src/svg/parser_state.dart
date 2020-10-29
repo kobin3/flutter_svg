@@ -531,6 +531,8 @@ class _Elements {
 
     final double letterSpacing = parseDouble(parserState.attribute('letterSpacing', def: '0'));
 
+    final double newLineIn = parseDouble(parserState.attribute('newLineIn', def: '0'));
+
     void _processText(String value) {
       if (value.isEmpty) {
         return;
@@ -571,6 +573,7 @@ class _Elements {
             )
           ),
         lastTextInfo.style.fill,
+        newLineIn: newLineIn > 0 ? newLineIn : null,
       );
 
       ///decrease with box-width
@@ -613,6 +616,7 @@ class _Elements {
             value,
             style,
             style.fill,
+            newLineIn: newLineIn > 0 ? newLineIn : null,
           );
         }
       }

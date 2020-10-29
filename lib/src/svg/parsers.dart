@@ -254,6 +254,7 @@ Paragraph createParagraph(
   String text,
   DrawableStyle style,
   DrawablePaint foregroundOverride,
+  {double newLineIn}
 ) {
   final ParagraphBuilder builder = ParagraphBuilder(ParagraphStyle())
     ..pushStyle(
@@ -262,7 +263,9 @@ Paragraph createParagraph(
       ),
     )
     ..addText(text);
-  return builder.build()..layout(_infiniteParagraphConstraints);
+  return builder.build()..layout(ParagraphConstraints(
+  width: newLineIn ?? _infiniteParagraphConstraints.width,
+));
 }
 
 /// Parses strings in the form of '1.0' or '100%'.
