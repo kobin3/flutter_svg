@@ -529,7 +529,7 @@ class _Elements {
       parseDouble(parserState.attribute('box-height', def: '0')),
     );
 
-    final double letterSpacing = parseDouble(parserState.attribute('letterSpacing', def: '0'));
+    final double letterSpacing = parseDouble(parserState.attribute('letter-spacing', def: '0'));
 
     final double newLineIn = parseDouble(parserState.attribute('newLineIn', def: '0'));
 
@@ -582,6 +582,8 @@ class _Elements {
 
         while (sizeBox.width < fill.longestLine) {
           fs = fs - 0.2;
+
+          // print('width : ${sizeBox.width} , ${fill.longestLine}');
 
           final DrawableStyle style = DrawableStyle(
             stroke: lastTextInfo.style.stroke,
